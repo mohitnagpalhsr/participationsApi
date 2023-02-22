@@ -12,4 +12,6 @@ public partial class Sport
     public string? SportsName { get; set; }
 
     public string? SportsType { get; set; }
+
+    public virtual ICollection<Participation> Participations { get; } = new List<Participation>();
 }

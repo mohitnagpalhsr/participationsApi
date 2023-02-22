@@ -22,4 +22,10 @@ public partial class Participation
     public string? Status { get; set; }
 
     public string? Comments { get; set; }
+
+    public virtual Event? Event { get; set; }
+
+    public virtual Player? Player { get; set; }
+
+    public virtual Sport? Sports { get; set; }
 }

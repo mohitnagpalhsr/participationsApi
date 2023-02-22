@@ -33,7 +33,7 @@ public partial class SportsEventManagementContext : DbContext
     {
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.EventId).HasName("PK__Event__2DC7BD09FDA39B20");
+            entity.HasKey(e => e.EventId).HasName("PK__Event__2DC7BD092B858452");
 
             entity.ToTable("Event");
 
@@ -50,15 +50,20 @@ public partial class SportsEventManagementContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("sportsName");
+            entity.Property(e => e.Status)
+                .HasMaxLength(9)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('scheduled')")
+                .HasColumnName("status");
         });
 
         modelBuilder.Entity<LoginModel>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__LoginMod__3214EC07E8BC18FC");
+            entity.HasKey(e => e.Id).HasName("PK__LoginMod__3214EC07904A0096");
 
             entity.ToTable("LoginModel");
 
-            entity.HasIndex(e => e.Username, "UQ__LoginMod__536C85E49E6EAB58").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__LoginMod__536C85E4E3BD4DC5").IsUnique();
 
             entity.Property(e => e.Role)
                 .HasMaxLength(10)
@@ -71,7 +76,7 @@ public partial class SportsEventManagementContext : DbContext
 
         modelBuilder.Entity<Participation>(entity =>
         {
-            entity.HasKey(e => e.ParticipationId).HasName("PK__Particip__78B6F50532F1B400");
+            entity.HasKey(e => e.ParticipationId).HasName("PK__Particip__78B6F5059F46D61A");
 
             entity.ToTable("Participation");
 
@@ -99,11 +104,23 @@ public partial class SportsEventManagementContext : DbContext
                 .IsUnicode(false)
                 .HasDefaultValueSql("('pending')")
                 .HasColumnName("status");
+
+            entity.HasOne(d => d.Event).WithMany(p => p.Participations)
+                .HasForeignKey(d => d.EventId)
+                .HasConstraintName("FK__Participa__event__44FF419A");
+
+            entity.HasOne(d => d.Player).WithMany(p => p.Participations)
+                .HasForeignKey(d => d.PlayerId)
+                .HasConstraintName("FK__Participa__playe__440B1D61");
+
+            entity.HasOne(d => d.Sports).WithMany(p => p.Participations)
+                .HasForeignKey(d => d.SportsId)
+                .HasConstraintName("FK__Participa__sport__45F365D3");
         });
 
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasKey(e => e.PlayerId).HasName("PK__Player__2CDA01F1471457D4");
+            entity.HasKey(e => e.PlayerId).HasName("PK__Player__2CDA01F1EA3CF11C");
 
             entity.ToTable("Player");
 
@@ -129,15 +146,20 @@ public partial class SportsEventManagementContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("sportsName");
+            entity.Property(e => e.Status)
+                .HasMaxLength(8)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('inactive')")
+                .HasColumnName("status");
         });
 
         modelBuilder.Entity<Sport>(entity =>
         {
-            entity.HasKey(e => e.SportsId).HasName("PK__Sport__1F4D71B670CF73A5");
+            entity.HasKey(e => e.SportsId).HasName("PK__Sport__1F4D71B6AC2CC16D");
 
             entity.ToTable("Sport");
 
-            entity.HasIndex(e => e.SportsName, "UQ__Sport__DB7106D78EB502FC").IsUnique();
+            entity.HasIndex(e => e.SportsName, "UQ__Sport__DB7106D799E1AF15").IsUnique();
 
             entity.Property(e => e.SportsId).HasColumnName("sportsId");
             entity.Property(e => e.NoOfPlayers).HasColumnName("noOfPlayers");

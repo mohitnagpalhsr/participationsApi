@@ -18,4 +18,8 @@ public partial class Player
     public string? Gender { get; set; }
 
     public string? SportsName { get; set; }
+
+    public string? Status { get; set; }
+
+    public virtual ICollection<Participation> Participations { get; } = new List<Participation>();
 }
